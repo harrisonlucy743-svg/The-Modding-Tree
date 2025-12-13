@@ -37,4 +37,4 @@ addLayer("p", {
         {key: "a", description: "P: Reset for a", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
     layerShown(){return true}
-})
+},
