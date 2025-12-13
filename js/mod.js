@@ -38,21 +38,42 @@ function canGenPoints(){
 
 // Calculate points/sec!
 function getPointGen() {
-	if(!canGenPoints())
-		return new Decimal(0)
+    if (!canGenPoints()) return new Decimal(0)
 
-	let gain = new Decimal(1)
-	return gain
+    let gain = new Decimal(1)
+    
+    // Apply your Upgrade A11 boost
+    if (hasUpgrade('a', 11)) gain = gain.times(upgradeEffect('a', 11))
+
+    // SOFTCAP LOGIC
+    // If gain is greater than 1e10...
+    if (gain.gte("1e10")) {
+        let softcapStart = new Decimal("1e10")
+        
+        // 1. Get the 'magnitude' (the exponent)
+        let magnitude = gain.log10() 
+        
+        // 2. Apply the root softcap logic
+        // This formula makes e40 behave like e20, e90 like e30, etc.
+        let newMagnitude = magnitude.div(10).sqrt().times(10)
+        
+        // 3. Re-apply the magnitude to 10
+        gain = new Decimal(10).pow(newMagnitude)
+    }
+
+    return gain
 }
-
 // You can add non-layer related variables that should to into "player" and be saved here, along with default values
 function addedPlayerData() { return {
 }}
 
 // Display extra things at the top of the page
-var displayThings = [
-]
-
+displayThings: [
+    function() {
+        if (getPointGen().gte("1e10")) 
+            return "Point gain is softcapped above 1.00e10!"
+    },
+],
 // Determines when the game "ends"
 function isEndgame() {
 	return player.points.gte(new Decimal("e280000000"))
