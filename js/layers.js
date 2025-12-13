@@ -107,7 +107,7 @@ addLayer("p", {
 				description: "Points boost their own generation.",
 				cost() { return tmp.h.costMult11.times(((Array.isArray(tmp.ma.mastered))?tmp.ma.mastered.includes(this.layer):false)?50:5).pow(tmp.h.costExp11) },
 				effect() { 
-					let eff = player.points.plus(1).log10().pow(0.75).plus(1);
+					let eff = player.points.plus(1).log10().pow(0.90).plus(1);
 					if (hasUpgrade("p", 33)) eff = eff.pow(upgradeEffect("p", 33));
 					if (hasUpgrade("g", 15)) eff = eff.pow(upgradeEffect("g", 15));
 					if (hasUpgrade("hn", 13)) eff = eff.pow(upgradeEffect("hn", 13));
